@@ -1,0 +1,467 @@
+
+[2025-07-03 12:32:05]
+False is not true : Validation failed: Salary should be positive
+Suggested Fix:
+```
+UPDATE players SET salary_in_cr = ABS(salary_in_cr) WHERE salary_in_cr <= 0;
+========================================
+Executed SQL:
+UPDATE players SET salary_in_cr = ABS(salary_in_cr) WHERE salary_in_cr <= 0;
+========================================
+
+[2025-07-03 12:40:17]
+False is not true : Validation failed: Nationality should be non null, non empty and set to 'Australian'
+Suggested Fix:
+UPDATE players SET nationality = LOWER('Australian') WHERE nationality IS NULL OR nationality = '' OR nationality != LOWER(nationality);
+========================================
+Executed SQL:
+UPDATE players SET nationality = LOWER('Australian') WHERE nationality IS NULL OR nationality = '' OR nationality != LOWER(nationality);
+========================================
+
+[2025-07-03 12:51:13]
+False is not true : Validation failed: Nationality should be non null, non empty and set to 'Australian'
+Suggested Fix:
+UPDATE players SET nationality = LOWER(CASE WHEN nationality IS NULL OR LENGTH(TRIM(nationality)) = 0 THEN 'australian' ELSE LOWER(nationality) END);
+========================================
+Executed SQL:
+UPDATE players SET nationality = LOWER(CASE WHEN nationality IS NULL OR LENGTH(TRIM(nationality)) = 0 THEN 'australian' ELSE LOWER(nationality) END);
+========================================
+
+[2025-07-03 12:59:15]
+False is not true : Validation failed: Nationality should be non null, non empty and set to 'Australian'
+Suggested Fix:
+UPDATE players SET nationality='Australian' WHERE nationality IS NULL OR LENGTH(TRIM(nationality)) = 0 OR LOWER(nationality) <> 'australian';
+========================================
+Executed SQL:
+UPDATE players SET nationality='Australian' WHERE nationality IS NULL OR LENGTH(TRIM(nationality)) = 0 OR LOWER(nationality) <> 'australian';
+========================================
+
+[2025-07-03 13:06:16]
+False is not true : Validation failed: Nationality should be non null, non empty and set to 'Australian'
+Suggested Fix:
+UPDATE players SET nationality = 'Australian' WHERE nationality IS NULL OR TRIM(nationality) = '' OR LOWER(nationality) <> 'australian';
+========================================
+Executed SQL:
+UPDATE players SET nationality = 'Australian' WHERE nationality IS NULL OR TRIM(nationality) = '' OR LOWER(nationality) <> 'australian';
+========================================
+
+[2025-07-03 13:07:57]
+False is not true : Validation failed: Match count should not be negative
+Suggested Fix:
+UPDATE players SET matches_played = LEAST(matches_played, 0);
+========================================
+Executed SQL:
+UPDATE players SET matches_played = LEAST(matches_played, 0);
+========================================
+
+[2025-07-03 13:19:21]
+False is not true : Validation failed: Match count should not be negative
+Suggested Fix:
+Here is the valid SQL UPDATE query:
+```sql
+UPDATE players
+SET matches_played = ABS(matches_played)
+WHERE matches_played < 0;
+```
+This query updates the `matches_played` column of the `players` table by setting any negative values to their absolute value using the `ABS()` function. The `WHERE` clause ensures that only rows with non-positive values are updated.
+========================================
+
+[2025-07-03 13:22:22]
+False is not true : Validation failed: Salary should be positive
+Suggested Fix:
+UPDATE players SET salary_in_cr = ABS(salary_in_cr) WHERE salary_in_cr <= 0;
+========================================
+Executed SQL:
+UPDATE players SET salary_in_cr = ABS(salary_in_cr) WHERE salary_in_cr <= 0;
+========================================
+
+[2025-07-03 13:55:49]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+DELETE p1 FROM players p1
+INNER JOIN (
+  SELECT MIN(id) AS min_id, name FROM players GROUP BY name
+) p2 ON p1.name = p2.name AND p1.id = p2.min_id;
+========================================
+Executed SQL:
+DELETE p1 FROM players p1
+INNER JOIN (
+  SELECT MIN(id) AS min_id, name FROM players GROUP BY name
+) p2 ON p1.name = p2.name AND p1.id = p2.min_id;
+========================================
+
+[2025-07-03 14:09:06]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+DELETE FROM players
+USING players
+WHERE id > (SELECT MIN(id) FROM players WHERE name = players.name);
+========================================
+
+[2025-07-03 14:12:33]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+DELETE p1 FROM players p1
+WHERE id > (SELECT MIN(id) FROM players p2 WHERE p2.name = p1.name);
+========================================
+
+[2025-07-03 14:16:43]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+```
+DELETE p1 FROM players p1
+INNER JOIN (
+  SELECT MIN(id) AS min_id, name
+  FROM players
+  GROUP BY name
+) p2 ON p1.name = p2.name AND p1.id = p2.min_id;
+```
+========================================
+Executed SQL:
+DELETE p1 FROM players p1
+INNER JOIN (
+  SELECT MIN(id) AS min_id, name
+  FROM players
+  GROUP BY name
+) p2 ON p1.name = p2.name AND p1.id = p2.min_id;
+========================================
+
+[2025-07-03 14:26:40]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+DELETE p1 FROM players p1
+INNER JOIN (
+  SELECT MIN(id) AS id, name
+  FROM players
+  GROUP BY name
+) p2 ON p1.name = p2.name AND p1.id = p2.id
+========================================
+Executed SQL:
+DELETE p1 FROM players p1
+INNER JOIN (
+  SELECT MIN(id) AS id, name
+  FROM players
+  GROUP BY name
+) p2 ON p1.name = p2.name AND p1.id = p2.id
+========================================
+
+[2025-07-03 14:39:53]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+```
+DELETE p1 FROM players p1
+WHERE id IN (
+  SELECT MIN(id) FROM players p2
+  GROUP BY name
+) AND p1.id NOT IN (
+  SELECT id FROM (
+    SELECT MIN(id) AS min_id, name
+    FROM players
+    GROUP BY name
+  ) q WHERE q.name = p1.name
+);
+```
+========================================
+
+[2025-07-03 14:46:31]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+DELETE FROM players
+WHERE id NOT IN (
+    SELECT MIN(id)
+    FROM players
+    GROUP BY name
+);
+========================================
+
+[2025-07-03 14:51:42]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+To remove all but one of each duplicate entry, we can use the `GROUP BY` and `HAVING` clauses with a subquery.
+
+Here is an example SQL query that should help:
+
+```sql
+DELETE p1
+FROM players p1
+WHERE id NOT IN (
+  SELECT MAX(id) 
+  FROM players p2 
+  WHERE p1.name = p2.name
+)
+```
+
+This query works by comparing each row in the `players` table (`p1`) with all rows that have the same `name` and selecting only the row(s) with the maximum `id`. The rest of the rows are then deleted.
+
+Note: Before running this query, make sure to backup your database!
+========================================
+
+[2025-07-03 14:54:32]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+DELETE p1
+FROM players p1, 
+     (SELECT MIN(id) AS min_id, name FROM players GROUP BY name) p2
+WHERE p1.name = p2.name AND p1.id > p2.min_id;
+========================================
+Executed SQL:
+DELETE p1
+FROM players p1, 
+     (SELECT MIN(id) AS min_id, name FROM players GROUP BY name) p2
+WHERE p1.name = p2.name AND p1.id > p2.min_id;
+========================================
+
+[2025-07-03 14:56:50]
+False is not true : Validation failed: IPL Team should be only Chennai Super Kings
+Suggested Fix:
+UPDATE players SET ipl_team = 'Chennai Super Kings' WHERE ipl_team IS NULL OR ipl_team <> 'Chennai Super Kings';
+========================================
+Executed SQL:
+UPDATE players SET ipl_team = 'Chennai Super Kings' WHERE ipl_team IS NULL OR ipl_team <> 'Chennai Super Kings';
+========================================
+
+[2025-07-03 14:58:05]
+False is not true : Validation failed: Salary should be positive
+Suggested Fix:
+UPDATE players SET salary_in_cr = ABS(salary_in_cr) WHERE salary_in_cr <= 0;
+========================================
+Executed SQL:
+UPDATE players SET salary_in_cr = ABS(salary_in_cr) WHERE salary_in_cr <= 0;
+========================================
+
+[2025-07-03 14:59:19]
+False is not true : Validation failed: Nationality should be non null, non empty and set to 'Australian'
+Suggested Fix:
+```
+UPDATE players 
+SET nationality = 'Australian' 
+WHERE nationality IS NULL OR LENGTH(TRIM(nationality)) = 0 OR LOWER(nationality) <> 'australian';
+========================================
+Executed SQL:
+UPDATE players 
+SET nationality = 'Australian' 
+WHERE nationality IS NULL OR LENGTH(TRIM(nationality)) = 0 OR LOWER(nationality) <> 'australian';
+========================================
+
+[2025-07-03 15:00:35]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+DELETE p1
+FROM players p1, players p2
+WHERE p1.name = p2.name AND p1.id > p2.id;
+========================================
+Executed SQL:
+DELETE p1
+FROM players p1, players p2
+WHERE p1.name = p2.name AND p1.id > p2.id;
+========================================
+
+[2025-07-03 15:02:35]
+False is not true : Validation failed: IPL Team should be only Chennai Super Kings
+Suggested Fix:
+```
+UPDATE players
+SET ipl_team = 'Chennai Super Kings'
+WHERE ipl_team IS NULL OR ipl_team <> 'Chennai Super Kings';
+```
+========================================
+Executed SQL:
+UPDATE players
+SET ipl_team = 'Chennai Super Kings'
+WHERE ipl_team IS NULL OR ipl_team <> 'Chennai Super Kings';
+========================================
+
+[2025-07-04 11:13:15]
+False is not true : Validation failed: Salary should be positive
+Suggested Fix:
+UPDATE players SET salary_in_cr = ABS(salary_in_cr) WHERE salary_in_cr <= 0;
+========================================
+Executed SQL:
+UPDATE players SET salary_in_cr = ABS(salary_in_cr) WHERE salary_in_cr <= 0;
+========================================
+
+[2025-07-04 11:36:43]
+False is not true : Validation failed: Nationality should be non null, non empty and set to 'Australian'
+Suggested Fix:
+```
+UPDATE players
+SET nationality = 'Australian'
+WHERE nationality IS NULL OR LTrim(RTrim(nationality))='' OR LOWER(nationality)!='australian';
+```
+========================================
+Executed SQL:
+UPDATE players
+SET nationality = 'Australian'
+WHERE nationality IS NULL OR LTrim(RTrim(nationality))='' OR LOWER(nationality)!='australian';
+========================================
+
+[2025-07-04 11:50:01]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+DELETE p1 FROM players p1
+WHERE EXISTS (SELECT 1 FROM players p2 WHERE p1.name = p2.name AND p1.id > p2.id);
+========================================
+
+[2025-07-04 11:53:14]
+False is not true : Validation failed: IPL Team should be only Chennai Super Kings
+Suggested Fix:
+UPDATE players SET ipl_team = 'Chennai Super Kings' WHERE ipl_team IS NULL OR ipl_team <> 'Chennai Super Kings';
+========================================
+Executed SQL:
+UPDATE players SET ipl_team = 'Chennai Super Kings' WHERE ipl_team IS NULL OR ipl_team <> 'Chennai Super Kings';
+========================================
+
+[2025-07-04 12:05:10]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+DELETE p1 FROM players p1 
+WHERE EXISTS (SELECT 1 FROM players p2 WHERE p2.name = p1.name AND p2.id < p1.id);
+========================================
+
+[2025-07-04 12:09:06]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+```
+DELETE p1 FROM players p1
+WHERE EXISTS (
+    SELECT 1 FROM players p2
+    WHERE p2.name = p1.name AND p2.id < p1.id
+);
+```
+========================================
+
+[2025-07-04 12:13:26]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+DELETE p1
+FROM players p1
+INNER JOIN (
+    SELECT MIN(id) AS min_id, name
+    FROM players
+    GROUP BY name
+) p2 ON p1.name = p2.name AND p1.id = p2.min_id;
+========================================
+Executed SQL:
+DELETE p1
+FROM players p1
+INNER JOIN (
+    SELECT MIN(id) AS min_id, name
+    FROM players
+    GROUP BY name
+) p2 ON p1.name = p2.name AND p1.id = p2.min_id;
+========================================
+
+[2025-07-04 12:29:43]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+DELETE FROM players 
+WHERE id NOT IN(
+  SELECT * FROM (
+    SELECT MIN(id)
+    FROM players
+    GROUP BY name
+  ) AS temp_ids
+);
+========================================
+Executed SQL:
+DELETE FROM players 
+WHERE id NOT IN(
+  SELECT * FROM (
+    SELECT MIN(id)
+    FROM players
+    GROUP BY name
+  ) AS temp_ids
+);
+========================================
+
+[2025-07-04 14:13:27]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+DELETE FROM players
+WHERE id NOT IN(
+  SELECT * FROM (
+    SELECT MIN(id)
+    FROM players
+    GROUP BY name
+  )AS temp_ids
+);
+========================================
+Executed SQL:
+DELETE FROM players
+WHERE id NOT IN(
+  SELECT * FROM (
+    SELECT MIN(id)
+    FROM players
+    GROUP BY name
+  )AS temp_ids
+);
+========================================
+
+[2025-07-04 15:30:44]
+False is not true : Validation failed: Salary should be positive
+Suggested Fix:
+UPDATE players SET salary_in_cr = ABS(salary_in_cr) WHERE salary_in_cr <= 0;
+========================================
+Executed SQL:
+UPDATE players SET salary_in_cr = ABS(salary_in_cr) WHERE salary_in_cr <= 0;
+========================================
+
+[2025-07-04 15:32:17]
+False is not true : Validation failed: Nationality should be non null, non empty and set to 'Australian'
+Suggested Fix:
+```
+UPDATE players SET nationality = 'Australian' WHERE nationality IS NULL OR LENGTH(TRIM(nationality)) = 0 OR LOWER(nationality) <> 'australian';
+========================================
+Executed SQL:
+UPDATE players SET nationality = 'Australian' WHERE nationality IS NULL OR LENGTH(TRIM(nationality)) = 0 OR LOWER(nationality) <> 'australian';
+========================================
+
+[2025-07-04 15:33:25]
+False is not true : Validation failed: IPL Team should be only Chennai Super Kings
+Suggested Fix:
+UPDATE players SET ipl_team = 'Chennai Super Kings' WHERE ipl_team IS NULL OR ipl_team != 'Chennai Super Kings';
+========================================
+Executed SQL:
+UPDATE players SET ipl_team = 'Chennai Super Kings' WHERE ipl_team IS NULL OR ipl_team != 'Chennai Super Kings';
+========================================
+
+[2025-07-04 15:34:55]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+DELETE FROM players
+WHERE id NOT IN(
+  SELECT * FROM (
+    SELECT MIN(id)
+    FROM players
+    GROUP BY name
+  )AS temp_ids
+);
+========================================
+Executed SQL:
+DELETE FROM players
+WHERE id NOT IN(
+  SELECT * FROM (
+    SELECT MIN(id)
+    FROM players
+    GROUP BY name
+  )AS temp_ids
+);
+========================================
+
+[2025-07-04 16:26:25]
+False is not true : Validation failed: Salary should be positive
+Suggested Fix:
+UPDATE players SET salary_in_cr = ABS(salary_in_cr) WHERE salary_in_cr <= 0;
+========================================
+Executed SQL:
+UPDATE players SET salary_in_cr = ABS(salary_in_cr) WHERE salary_in_cr <= 0;
+========================================
+
+[2025-07-04 16:30:27]
+False is not true : Validation failed: Nationality should be non null, non empty and set to 'Australian'
+Suggested Fix:
+UPDATE players SET nationality = 'Australian' WHERE nationality IS NULL OR LENGTH(TRIM(nationality)) = 0 OR LOWER(nationality) <> 'australian';
+========================================
+Executed SQL:
+UPDATE players SET nationality = 'Australian' WHERE nationality IS NULL OR LENGTH(TRIM(nationality)) = 0 OR LOWER(nationality) <> 'australian';
+========================================
