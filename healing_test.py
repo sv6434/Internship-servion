@@ -1,6 +1,6 @@
 import mysql.connector
 import unittest
-from healer import heal_sql_query
+from healer import heal_sql_query, SALARY_COLUMN, TABLE_NAME
 from db_test_config import DB_CONFIG
 
 class TestHealingValidation(unittest.TestCase):
@@ -45,26 +45,26 @@ class TestHealingValidation(unittest.TestCase):
 
     def test_ipl_team_is_csk(self):
         self.run_test_with_healing(
-            "SELECT * FROM players WHERE ipl_team IS NULL OR ipl_team != 'Chennai Super Kings'",
+            f"SELECT * FROM {TABLE_NAME} WHERE ipl_team IS NULL OR ipl_team != 'Chennai Super Kings'",
             "IPL Team should be only Chennai Super Kings"
         )
 
     def test_nationality_is_aus(self):
         print("\n🧪 Running: Nationality should be 'Australian' and not NULL or empty...")
-        query = "SELECT * FROM players WHERE nationality IS NULL OR TRIM(nationality) = '' OR LOWER(nationality) != 'australian'"
+        query = f"SELECT * FROM {TABLE_NAME} WHERE nationality IS NULL OR TRIM(nationality) = '' OR LOWER(nationality) != 'australian'"
         description = "Nationality should be non null, non empty and set to 'Australian'"
         self.run_test_with_healing(query, description)
 
     def test_salary_positive(self):
         self.run_test_with_healing(
-            "SELECT * FROM players WHERE salary_in_cr <= 0",
+            f"SELECT * FROM {TABLE_NAME} WHERE {SALARY_COLUMN} <= 0",
             "Salary should be positive"
         )
 
     def test_unique_names(self):
         self.run_test_with_healing(
-            """
-            SELECT name, COUNT(*) as count FROM players
+            f"""
+            SELECT name, COUNT(*) as count FROM {TABLE_NAME}
             GROUP BY name HAVING count > 1
             """,
             "Player names should be unique"

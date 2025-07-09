@@ -465,3 +465,87 @@ UPDATE players SET nationality = 'Australian' WHERE nationality IS NULL OR LENGT
 Executed SQL:
 UPDATE players SET nationality = 'Australian' WHERE nationality IS NULL OR LENGTH(TRIM(nationality)) = 0 OR LOWER(nationality) <> 'australian';
 ========================================
+
+[2025-07-09 10:08:46]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+DELETE FROM players
+WHERE id NOT IN (
+  SELECT * FROM (
+    SELECT MIN(id) AS min_id
+    FROM players
+    GROUP BY name
+  ) AS temp_ids
+);
+========================================
+Executed SQL:
+DELETE FROM players
+WHERE id NOT IN (
+  SELECT * FROM (
+    SELECT MIN(id) AS min_id
+    FROM players
+    GROUP BY name
+  ) AS temp_ids
+);
+========================================
+
+[2025-07-09 10:10:09]
+False is not true : Validation failed: IPL Team should be only Chennai Super Kings
+Suggested Fix:
+UPDATE players SET ipl_team = 'Chennai Super Kings' WHERE ipl_team IS NULL OR ipl_team != 'Chennai Super Kings';
+========================================
+Executed SQL:
+UPDATE players SET ipl_team = 'Chennai Super Kings' WHERE ipl_team IS NULL OR ipl_team != 'Chennai Super Kings';
+========================================
+
+[2025-07-09 10:12:40]
+False is not true : Validation failed: Nationality should be non null, non empty and set to 'Australian'
+Suggested Fix:
+```
+UPDATE players SET nationality = 'Australian' WHERE nationality IS NULL OR LENGTH(TRIM(nationality)) = 0 OR LOWER(nationality) != 'australian';
+```
+========================================
+Executed SQL:
+UPDATE players SET nationality = 'Australian' WHERE nationality IS NULL OR LENGTH(TRIM(nationality)) = 0 OR LOWER(nationality) != 'australian';
+========================================
+
+[2025-07-09 13:16:18]
+False is not true : Validation failed: Nationality should be non null, non empty and set to 'Australian'
+Suggested Fix:
+UPDATE players SET nationality = 'Australian' WHERE NATIONALITY IS NULL OR LENGTH(TRIM(nationality)) = 0 OR LOWER(nationality) != 'australian';
+========================================
+Executed SQL:
+UPDATE players SET nationality = 'Australian' WHERE NATIONALITY IS NULL OR LENGTH(TRIM(nationality)) = 0 OR LOWER(nationality) != 'australian';
+========================================
+
+[2025-07-09 13:17:19]
+False is not true : Validation failed: IPL Team should be only Chennai Super Kings
+Suggested Fix:
+UPDATE players SET ipl_team = 'Chennai Super Kings' WHERE ipl_team IS NULL OR ipl_team <> 'Chennai Super Kings';
+========================================
+Executed SQL:
+UPDATE players SET ipl_team = 'Chennai Super Kings' WHERE ipl_team IS NULL OR ipl_team <> 'Chennai Super Kings';
+========================================
+
+[2025-07-09 13:18:48]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+DELETE FROM players
+WHERE id NOT IN (
+  SELECT * FROM (
+    SELECT MIN(id) AS min_id
+    FROM players
+    GROUP BY name
+  ) AS temp_ids
+);
+========================================
+Executed SQL:
+DELETE FROM players
+WHERE id NOT IN (
+  SELECT * FROM (
+    SELECT MIN(id) AS min_id
+    FROM players
+    GROUP BY name
+  ) AS temp_ids
+);
+========================================
