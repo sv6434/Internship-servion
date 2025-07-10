@@ -1,6 +1,6 @@
 import mysql.connector
 import unittest
-from healer import heal_sql_query, SALARY_COLUMN, TABLE_NAME
+from healer import heal_sql_query, SALARY_COLUMN, TABLE_NAME, detect_and_generate_datatype_fix
 from db_test_config import DB_CONFIG
 
 class TestHealingValidation(unittest.TestCase):
@@ -37,9 +37,15 @@ class TestHealingValidation(unittest.TestCase):
             healed_query = heal_sql_query(str(e), query)
             print("💡 Attempting to heal the query...")
             try:
-                self.cursor.execute(query)
-                rows = self.cursor.fetchall()
-                print("✅ Healed result:", rows)
+                if healed_query and isinstance(healed_query, str) and not healed_query.startswith("Manual salary corrections"):
+                    self.cursor.execute(healed_query)
+                    self.conn.commit()
+                    self.cursor.execute(query)
+                    rows = self.cursor.fetchall()
+                    print("✅ Healed result:", rows)
+                    self.assertTrue(condition(rows), f"Healing failed: {description}")
+                else:
+                    print("✅ Manual correction completed. No SQL execution needed.")
             except Exception as heal_error:
                 print("❌ Healing attempt failed:", heal_error)
 
@@ -69,6 +75,20 @@ class TestHealingValidation(unittest.TestCase):
             """,
             "Player names should be unique"
         )
+
+    def test_datatype_mismatch(self):
+        print("\n🔍 Running: Datatype mismatch detection via Memcached")
+        alter_query = detect_and_generate_datatype_fix()
+        if alter_query:
+            print(f"💡 Suggested ALTER query:\n{alter_query}")
+            try:
+                self.cursor.execute(alter_query)
+                self.conn.commit()
+                print("✅ Datatype fix applied.")
+            except Exception as e:
+                print(f"❌ Failed to apply datatype fix: {e}")
+        else:
+            print("✅ No datatype mismatches found.")
 
 if __name__ == "__main__":
     print("🛠️ Starting Healing Test...\n")

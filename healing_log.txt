@@ -549,3 +549,30 @@ WHERE id NOT IN (
   ) AS temp_ids
 );
 ========================================
+
+[2025-07-10 16:12:17]
+False is not true : Validation failed: Nationality should be non null, non empty and set to 'Australian'
+Suggested Fix:
+UPDATE players SET nationality='Australian' WHERE NATIONALITY IS NULL OR LENGTH(TRIM(nationality)) = 0 OR LOWER(nationality) != 'australian';
+========================================
+Executed SQL:
+UPDATE players SET nationality='Australian' WHERE NATIONALITY IS NULL OR LENGTH(TRIM(nationality)) = 0 OR LOWER(nationality) != 'australian';
+========================================
+
+[2025-07-10 16:13:19]
+False is not true : Validation failed: IPL Team should be only Chennai Super Kings
+Suggested Fix:
+UPDATE players SET ipl_team = 'Chennai Super Kings' WHERE ipl_team IS NULL OR ipl_team <> 'Chennai Super Kings';
+========================================
+Executed SQL:
+UPDATE players SET ipl_team = 'Chennai Super Kings' WHERE ipl_team IS NULL OR ipl_team <> 'Chennai Super Kings';
+========================================
+
+[2025-07-10 16:14:50]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+DELETE FROM players WHERE id NOT IN ( SELECT * FROM ( SELECT MIN(id) FROM players GROUP BY name ) AS temp_ids );
+========================================
+Executed SQL:
+DELETE FROM players WHERE id NOT IN ( SELECT * FROM ( SELECT MIN(id) FROM players GROUP BY name ) AS temp_ids );
+========================================
