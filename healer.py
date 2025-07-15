@@ -3,10 +3,10 @@ import json
 from datetime import datetime
 import mysql.connector
 import re
-from db_test_config import DB_CONFIG  # Only DB credentials here
+from db_test_config import DB_CONFIG
 from pymemcache.client.base import Client as MemcacheClient
 
-# 🧠 Detect table name dynamically
+# Detect table name dynamically
 def get_actual_table_name():
     try:
         conn = mysql.connector.connect(**DB_CONFIG)
@@ -17,7 +17,7 @@ def get_actual_table_name():
         )
         tables = cursor.fetchall()
         if not tables:
-            raise Exception("❌ No tables found in the database.")
+            raise Exception("No tables found in the database.")
         elif len(tables) == 1:
             return tables[0][0]
         else:
@@ -26,44 +26,45 @@ def get_actual_table_name():
                     return table[0]
             return tables[0][0]
     except Exception as e:
-        print(f"❌ Failed to detect table name: {e}")
+        print(f"Failed to detect table name: {e}")
         return "players"
     finally:
-        if 'cursor' in locals():
-            cursor.close()
-        if 'conn' in locals():
-            conn.close()
+        if 'cursor' in locals(): cursor.close()
+        if 'conn' in locals(): conn.close()
 
 TABLE_NAME = get_actual_table_name()
 
-# 🧠 Detect salary column dynamically
+# Detect salary column dynamically
 def get_salary_column_name():
     try:
         conn = mysql.connector.connect(**DB_CONFIG)
         cursor = conn.cursor()
         cursor.execute(f"SHOW COLUMNS FROM {TABLE_NAME}")
         columns = [col[0].lower() for col in cursor.fetchall()]
-        keywords = ['salary', 'price', 'compensation', 'pay', 'wage','sal']
+        keywords = ['salary', 'price', 'compensation', 'pay', 'wage', 'sal', 'cost']
         for keyword in keywords:
             for col in columns:
                 if keyword in col:
                     return col
-        raise Exception("❌ No salary-related column found.")
+        raise Exception("No salary-related column found.")
     except Exception as e:
-        print(f"❌ Failed to detect salary column: {e}")
-        return "salary_in_cr"  # Fallback
+        print(f"Failed to detect salary column: {e}")
+        return "salary_in_cr"
     finally:
-        if 'cursor' in locals():
-            cursor.close()
-        if 'conn' in locals():
-            conn.close()
+        if 'cursor' in locals(): cursor.close()
+        if 'conn' in locals(): conn.close()
 
 SALARY_COLUMN = get_salary_column_name()
-print(f"🧠 Detected salary column: {SALARY_COLUMN}")
+print(f"Detected salary column: {SALARY_COLUMN}")
+
+# ✅ Log passed validations
+def log_passed_validation(message):
+    with open("healing_log.txt", "a") as log:
+        log.write(f"\n[{datetime.now()}] PASSED: {message}\n{'='*40}\n")
 
 # 🛠️ Manual Salary Fix
 def manually_correct_salary():
-    print("🛠️ Manual intervention for negative salaries...")
+    print("Manual intervention for negative salaries...")
     try:
         conn = mysql.connector.connect(**DB_CONFIG)
         cursor = conn.cursor(dictionary=True)
@@ -71,7 +72,7 @@ def manually_correct_salary():
         cursor.execute(query)
         rows = cursor.fetchall()
         if not rows:
-            print("✅ No negative salaries found.")
+            print("No negative salaries found.")
             return None
         for row in rows:
             print(f"\nPlayer: {row['name']} (ID: {row['id']}) has invalid salary: {row[SALARY_COLUMN]}")
@@ -80,28 +81,30 @@ def manually_correct_salary():
                     new_salary = float(input(f"Enter corrected salary for {row['name']}: "))
                     break
                 except ValueError:
-                    print("❌ Invalid input. Please enter a number.")
+                    print("Invalid input. Please enter a number.")
             update_query = f"UPDATE {TABLE_NAME} SET {SALARY_COLUMN} = {new_salary} WHERE id = {row['id']}"
             cursor.execute(update_query)
-            print(f"✅ Updated salary for {row['name']} to ₹{new_salary} Cr")
+            print(f"Updated salary for {row['name']} to ₹{new_salary} Cr")
         conn.commit()
-        print("✅ All corrections applied successfully.")
+        with open("healing_log.txt", "a") as log:
+            log.write(f"\n[{datetime.now()}] Manual salary correction performed for {len(rows)} players.\n{'='*40}\n")
         return "Manual salary corrections completed."
     except Exception as e:
-        print(f"❌ Manual correction failed: {e}")
+        print(f"Manual correction failed: {e}")
         return None
     finally:
-        if 'cursor' in locals():
-            cursor.close()
-        if 'conn' in locals():
-            conn.close()
+        if 'cursor' in locals(): cursor.close()
+        if 'conn' in locals(): conn.close()
 
-# 🤖 Prompt Generator
+# 💬 Prompt Generator + LLaMA call
 def call_llama_to_heal(error_msg):
-    print("🤖 Sending issue to LLaMA via Ollama...")
+    print("Sending issue to LLaMA via Ollama...")
+    datatype_prompt = detect_and_generate_datatype_fix()  # This logs separately if mismatch is found
+
     if "Salary should be positive" in error_msg:
         return manually_correct_salary()
-    elif "Player names should be unique" in error_msg:
+
+    if "Player names should be unique" in error_msg:
         prompt = f"""
 You are a MySQL expert. The '{TABLE_NAME}' table contains duplicate names. Write a SQL DELETE query that removes all duplicates, keeping only the row with the smallest id for each name. Important: Avoid MySQL error 1093 by wrapping the inner SELECT inside another SELECT and aliasing it. Only return the SQL query. No explanation.
 Expected Output Format: DELETE FROM {TABLE_NAME} WHERE id NOT IN ( SELECT * FROM ( SELECT MIN(id) FROM {TABLE_NAME} GROUP BY name ) AS temp_ids );
@@ -119,6 +122,7 @@ You're a MySQL expert. In the {TABLE_NAME} table, all entries in the ipl_team co
         prompt = f"""
 You're a MySQL expert. The {TABLE_NAME} table has a problem. Fix the following issue using a valid SQL UPDATE or DELETE statement. If the SQL fails due to column name mismatch (e.g. '{SALARY_COLUMN}' not found), assume the correct column might be 'salary', 'price', or something similar. ONLY return the corrected SQL query. No explanation. Problem: {error_msg}
 """
+
     response = requests.post(
         "http://localhost:11434/api/generate",
         headers={"Content-Type": "application/json"},
@@ -129,12 +133,13 @@ You're a MySQL expert. The {TABLE_NAME} table has a problem. Fix the following i
         })
     )
     suggestion = response.json()['response'].strip()
+
     with open("healing_log.txt", "a") as log:
-        log.write(f"\n[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\n{error_msg}\nSuggested Fix:\n{suggestion}\n{'='*40}\n")
-    print("✅ Healing suggestion logged.")
+        log.write(f"\n[{datetime.now()}]\n{error_msg}\nSuggested Fix:\n{suggestion}\n{'='*40}\n")
+    print("Healing suggestion logged.")
     return suggestion
 
-# 🧪 Datatype fix logic using Memcached
+# 🧪 Datatype Fix Logic via Memcached
 def detect_and_generate_datatype_fix():
     try:
         conn = mysql.connector.connect(**DB_CONFIG)
@@ -143,6 +148,7 @@ def detect_and_generate_datatype_fix():
         current_columns = cursor.fetchall()
         mem = MemcacheClient(('localhost', 11211))
         mismatches = []
+
         for col in current_columns:
             col_name, current_type = col[0], col[1]
             cache_key = f"{TABLE_NAME}:{col_name}:type"
@@ -151,58 +157,76 @@ def detect_and_generate_datatype_fix():
                 cached_type = cached_type.decode()
                 if current_type.lower() != cached_type.lower():
                     print(f"Datatype mismatch: {col_name}\nCached: {cached_type}\nNow: {current_type}")
-                    mismatches.append(f"MODIFY {col_name} {cached_type}")
+                    mismatches.append((col_name, cached_type, current_type))
+
         if mismatches:
-            alter_query = f"ALTER TABLE {TABLE_NAME} " + ", ".join(mismatches) + ";"
-            return alter_query
+            mismatch_description = "\n".join(
+                [f"- Column '{col}' is currently '{now}' but should be '{expected}'"
+                 for col, expected, now in mismatches]
+            )
+            prompt = f"""
+You're a MySQL expert. The {TABLE_NAME} table has the following column datatype mismatches:
+{mismatch_description}
+Write a single valid SQL ALTER TABLE query to revert these columns to their original types.
+Expected Output Format: ALTER TABLE {TABLE_NAME} MODIFY column1 datatype1, MODIFY column2 datatype2;
+Only return the SQL query. No explanation.
+"""
+            response = requests.post(
+                "http://localhost:11434/api/generate",
+                headers={"Content-Type": "application/json"},
+                data=json.dumps({
+                    "model": "llama3",
+                    "prompt": prompt,
+                    "stream": False
+                })
+            )
+            sql_fix = response.json()['response'].strip()
+            with open("healing_log.txt", "a") as log:
+                log.write(f"\n[{datetime.now()}] Datatype mismatch detected\n{mismatch_description}\nSuggested Fix:\n{sql_fix}\n{'='*40}\n")
+            return sql_fix
         return None
     except Exception as e:
-        print(f"Error checking datatypes: {e}")
+        print(f"Datatype detection failed: {e}")
         return None
     finally:
-        if 'cursor' in locals():
-            cursor.close()
-        if 'conn' in locals():
-            conn.close()
-        if 'mem' in locals():
-            mem.close()
+        if 'cursor' in locals(): cursor.close()
+        if 'conn' in locals(): conn.close()
+        if 'mem' in locals(): mem.close()
 
-# 🧹 SQL Cleaner
+# 🧽 SQL Cleaner
 def clean_sql_query(query):
     query = re.sub(r"sql\n", "", query, flags=re.IGNORECASE).strip()
     lines = query.splitlines()
     sql_lines = []
     for line in lines:
-        if re.search(r"\b(update|delete|insert)\b", line, re.IGNORECASE):
+        if re.search(r"\b(update|delete|insert|alter)\b", line, re.IGNORECASE):
             sql_lines.append(line)
         elif sql_lines:
             sql_lines.append(line)
     return "\n".join(sql_lines).strip()
 
-# 🩺 Healing Execution
+# ⚙️ Execute Healing
 def heal_sql_query(error_msg, failed_query):
     suggestion = call_llama_to_heal(error_msg)
     if suggestion is None or (isinstance(suggestion, str) and suggestion.startswith("Manual salary corrections")):
         return suggestion
     cleaned_query = clean_sql_query(suggestion)
-    if not cleaned_query.lower().startswith(("update", "delete")) or TABLE_NAME.lower() not in cleaned_query.lower():
-        print("⚠️ Healing suggestion is not safe or doesn't target the right table. Skipping.")
+    if not cleaned_query.lower().startswith(("update", "delete", "alter")) or TABLE_NAME.lower() not in cleaned_query.lower():
+        print("Healing suggestion is not safe or doesn't target the right table. Skipping.")
         return None
     try:
         conn = mysql.connector.connect(**DB_CONFIG)
         cursor = conn.cursor()
-        print("🧪 Attempting to heal the query...")
-        cursor.execute(cleaned_query)
+        print("Attempting to heal the query...")
+        cursor.execute(cleaned_query,multi=True)
         conn.commit()
-        print("✅ Healing applied successfully.")
+        print("Healing applied successfully.")
         with open("healing_log.txt", "a") as log:
             log.write(f"Executed SQL:\n{cleaned_query}\n{'='*40}\n")
         return cleaned_query
     except mysql.connector.Error as err:
-        print(f"❌ Healing attempt failed: {err}")
+        print(f"Healing attempt failed: {err}")
         return None
     finally:
-        if 'cursor' in locals():
-            cursor.close()
-        if 'conn' in locals():
-            conn.close()
+        if 'cursor' in locals(): cursor.close()
+        if 'conn' in locals(): conn.close()
