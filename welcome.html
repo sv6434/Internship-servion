@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to our CSK Database</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <!-- Inline CSS for custom background color -->
+    <style>
+        body {
+            background-color: #99ccff; /* Ice Blue */
+        }
+    </style>
+</head>
+<body class="d-flex align-items-center justify-content-center vh-100">
+
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold text-primary">Welcome to our CSK Database</h1>
+        <p class="lead">Select an option below to manage players table:</p>
+
+        <div class="list-group w-50 mx-auto">
+            <a href="{{ url_for('view_records') }}" class="list-group-item list-group-item-action">View Original table</a>
+            <a href="{{ url_for('view_test_records') }}" class="list-group-item list-group-item-action">View Testing table</a>
+            <a href="{{ url_for('view_log') }}" class="list-group-item list-group-item-action">View the results of the test</a>
+            <a href="{{ url_for('update_page') }}" class="list-group-item list-group-item-action">Update the records of the table</a>
+			 <a href="{{ url_for('insert_page') }}" class="list-group-item list-group-item-action">Insert New Records </a>
+        </div>
+    </div>
+
+</body>
+</html>

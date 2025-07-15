@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Players record</title>
+</head>
+<body>
+    <h2>Update Players record</h2>
+    <form action="{{ url_for('update_players') }}" method="POST">
+        <label for="id">Player ID (to update):</label>
+        <input type="text" name="id" required><br>
+
+        <label for="name">New Player Name:</label>
+        <input type="text" name="name" required><br>
+
+        <label for="age_at_selection">Age:</label>
+        <input type="text" name="age_at_selection" required><br>
+
+        <label for="{{ salary_column }}">New Salary in Cr:</label>
+        <input type="text" name="{{ salary_column }}" required><br>
+
+        <label for="nationality">Nationality:</label>
+        <input type="text" name="nationality" required><br>
+
+        <label for="ipl_team">New IPL Team:</label>
+        <input type="text" name="ipl_team" required><br>
+
+        <label for="matches_played">Matches Played:</label>
+        <input type="text" name="matches_played" required><br>
+
+        <button type="submit">Update record</button>
+    </form>
+</body>
+</html>

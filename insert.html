@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Insert Players Records</title>
+</head>
+<body>
+    <h2>Insert players records</h2>
+    <form action="{{ url_for('add_players') }}" method="POST">
+        <label for="id">Player ID:</label>
+        <input type="text" name="id" required><br>
+
+        <label for="name">Player Name:</label>
+        <input type="text" name="name" required><br>
+
+        <label for="age_at_selection">Age:</label>
+        <input type="text" name="age_at_selection" required><br>
+
+        <label for="{{salary_column}}">Salary in Cr:</label>
+        <input type="text" name="{{salary_column}}" required><br>
+		
+        <label for="nationality">Nationality:</label>
+        <input type="text" name="nationality" required><br>
+
+        <label for="ipl_team">IPL Team:</label>
+        <input type="text" name="ipl_team" required><br>
+		
+		 <label for="matches_played">Matches Played:</label>
+        <input type="text" name="matches_played" required><br>
+		
+
+        <button type="submit">Add Records</button>
+    </form>
+</body>
+</html>
+
+
+		 

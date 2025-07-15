@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Self-Healing Log Viewer</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .log-box {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-top: 20px;
+            white-space: pre-wrap; /* ✅ Wrap lines */
+            word-wrap: break-word;
+            overflow-x: auto;
+            max-height: 80vh;
+            font-family: Consolas, monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Self-Healing Test Log Viewer</h1>
+    <div class="log-box">
+        <pre>{{ log | safe }}</pre> <!-- ✅ Ensures line breaks are preserved -->
+    </div>
+</body>
+</html>

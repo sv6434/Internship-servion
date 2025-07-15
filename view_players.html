@@ -57,7 +57,7 @@
     <div class="container">
         <h1>Players Available</h1>
 
-        {% if records %}
+        {% if players %}
         <table>
             <tr>
                 <th>ID</th>
@@ -68,7 +68,7 @@
                 <th>IPL TEAM</th>
                 <th>Matches played</th>
             </tr>
-            {% for player in records %}
+            {% for player in players %}
             <tr>
                 <td>{{ player[0] }}</td>
                 <td>{{ player[1] }}</td>
@@ -76,7 +76,7 @@
                 <td>{{ player[3] }}</td>
                 <td>{{ player[4] }}</td>
                 <td>{{ player[5] }}</td>
-				<td>{{ player[6] }}>/td>
+				<td>{{ player[6] }}</td>
             </tr>
             {% endfor %}
         </table>
