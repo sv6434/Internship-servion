@@ -1,6 +1,6 @@
 import mysql.connector
 import unittest
-from healer import heal_sql_query, SALARY_COLUMN, TABLE_NAME, detect_and_generate_datatype_fix,log_passed_validation
+from healer import heal_sql_query, SALARY_COLUMN, TABLE_NAME, detect_and_generate_datatype_fix,log_passed_validation,detect_and_handle_extra_columns
 from db_test_config import DB_CONFIG
 from datetime import datetime
 
@@ -98,6 +98,15 @@ class TestHealingValidation(unittest.TestCase):
             print("No datatype mismatches found.")
             with open("healing_log.txt","a") as log:
                 log.write(f"\n[{datetime.now()}] PASSED: No datatype mismatch found via Memcached.\n{'='*40}\n")
+    def test_no_extra_columns(self):
+        print("\n Checkuing for extra columns in the test table")
+        extra_cols=detect_and_handle_extra_columns()
+        if extra_cols:
+            print(f"Handled extra columns:{extra_cols}")
+            log_passed_validation(f"Extra column handling completed:{extra_cols}")
+        else:
+            print("No extra columns found")
+            log_passed_validation("No extra column found in the test table")
 
 if __name__ == "__main__":
     print(" Starting Healing Test...\n")

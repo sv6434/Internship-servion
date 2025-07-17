@@ -7,7 +7,6 @@ from schema_healer import get_actual_table_name, get_salary_column_name
 
 # Load environment variables
 load_dotenv('.env')
-
 # Initialize Flask app
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
@@ -34,7 +33,20 @@ def DB2_connection():
 @app.route("/")
 def welcome():
     return render_template("welcome.html")
-
+#View the datatype of each column present in the database table
+@app.route("/view_datatypes")
+def view_datatypes():
+    conn=create_connection()
+    rec=[]
+    if conn:
+        cursor=conn.cursor()
+        cursor.execute("DESCRIBE players")
+        rec=cursor.fetchall()
+        cursor.close()
+        conn.close()
+    else:
+        flash("Failed to connect to database")
+    return render_template("view_datatypes.html",rec=rec,title="Datatypes of each column present in the table.")
 # View original database records
 @app.route("/view_records")
 def view_records():
@@ -55,9 +67,10 @@ def view_records():
 def view_test_records():
     conn = DB2_connection()
     players = []
+    table_name=get_actual_table_name()
     if conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM players")
+        cursor.execute(f"SELECT * FROM {table_name}")
         players = cursor.fetchall()
         cursor.close()
         conn.close()
@@ -147,9 +160,27 @@ def update_players():
         flash("Database connection failed.", "error")
 
     return redirect(url_for("welcome"))
-
-
-# View healing log file
+# Deleting a player record
+@app.route("/delete")
+def delete_page():
+    return render_template("delete.html")
+@app.route("/delete_record", methods=["POST"])
+def delete_record():
+    table_name = get_actual_table_name()
+    player_id = request.form["id"]  
+    print("Form submitted")
+    conn = DB2_connection()
+    if conn:
+        cursor = conn.cursor()
+        cursor.execute(f"DELETE FROM {table_name} WHERE id=%s", (player_id,))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        flash("Player deleted successfully.", "success")
+    else:
+        flash("Failed to connect to database", "error")
+    return redirect(url_for("welcome"))
+#Viewing the log file
 LOG_FILE = "healing_log.txt"
 @app.route("/log_view")
 def view_log():

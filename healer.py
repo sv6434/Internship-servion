@@ -5,7 +5,23 @@ import mysql.connector
 import re
 from db_test_config import DB_CONFIG
 from pymemcache.client.base import Client as MemcacheClient
-
+from dotenv import load_dotenv
+import os
+#Loading the environment variables for the original database
+load_dotenv('.env')
+# Production DB connection
+def create_connection():
+    try:
+        conn = mysql.connector.connect(
+            host=os.getenv('DB_HOST'),
+            user=os.getenv('DB_USER'),
+            password=os.getenv('DB_PASSWORD'),
+            database=os.getenv('DB_NAME')
+        )
+        return conn
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return None
 # Detect table name dynamically
 def get_actual_table_name():
     try:
@@ -192,10 +208,65 @@ Only return the SQL query. No explanation.
         if 'cursor' in locals(): cursor.close()
         if 'conn' in locals(): conn.close()
         if 'mem' in locals(): mem.close()
+#Comparing the columns between original and test table
+def detect_and_handle_extra_columns():
+    prod_conn = None
+    test_conn = None
+    try:
+        original_table = "players"
+        prod_conn = create_connection()
+        if not prod_conn:
+            print("❌ Cannot connect to production DB.")
+            return
+
+        prod_cursor = prod_conn.cursor()
+        prod_cursor.execute(f"SHOW COLUMNS FROM {original_table}")
+        original_columns = {col[0] for col in prod_cursor.fetchall()}
+
+        test_conn = mysql.connector.connect(**DB_CONFIG)
+        test_cursor = test_conn.cursor()
+        test_cursor.execute(f"SHOW COLUMNS FROM {TABLE_NAME}")
+        test_columns = {col[0] for col in test_cursor.fetchall()}
+
+        extra_columns = test_columns - original_columns
+
+        if not extra_columns:
+            print("✅ No extra columns found in test table.")
+            return None
+
+        print(f"⚠️ Extra columns detected in test table: {', '.join(extra_columns)}")
+        user_choice = input("Do you want to remove these extra columns? (Yes/No): ").strip().lower()
+
+        if user_choice == 'yes':
+            for col in extra_columns:
+                print(f"Dropping column '{col}'...This might take a few minutes")
+                drop_query=f"ALTER TABLE {TABLE_NAME} DROP COLUMN {col}"
+                test_cursor.execute(drop_query)
+                test_conn.commit()
+                print(f"✅ Column '{col}' removed from {TABLE_NAME}.")
+            print(f"✅ Removed {len(extra_columns)} extra columns from {TABLE_NAME}.")
+            return extra_columns  # Exit cleanly after success
+        else:
+            print("ℹ️ Columns retained as per user choice.")
+            return extra_columns
+
+    except Exception as e:
+        print(f"Error during extra column handling: {e}")
+        return None
+
+    finally:
+        if 'prod_cursor' in locals(): prod_cursor.close()
+        if 'test_cursor' in locals(): test_cursor.close()
+        if prod_conn: prod_conn.close()
+        if test_conn: test_conn.close()
+        print("✅ Schema check completed.")  # Final confirmation
 
 # 🧽 SQL Cleaner
 def clean_sql_query(query):
+    # Remove markdown formatting
+    query = re.sub(r"```sql|```", "", query, flags=re.IGNORECASE).strip()
     query = re.sub(r"sql\n", "", query, flags=re.IGNORECASE).strip()
+    
     lines = query.splitlines()
     sql_lines = []
     for line in lines:
@@ -204,6 +275,7 @@ def clean_sql_query(query):
         elif sql_lines:
             sql_lines.append(line)
     return "\n".join(sql_lines).strip()
+
 
 # ⚙️ Execute Healing
 def heal_sql_query(error_msg, failed_query):

@@ -1252,3 +1252,835 @@ UPDATE players SET ipl_team='Chennai Super Kings';
 
 [2025-07-15 16:44:27.514272] PASSED: Player names should be unique
 ========================================
+
+[2025-07-17 11:44:11.178292] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 11:44:11.295099] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 11:44:11.299778] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 11:44:14.970121] Manual salary correction performed for 1 players.
+========================================
+
+[2025-07-17 11:44:14.972608] PASSED: Salary should be positive (manual correction)
+========================================
+
+[2025-07-17 11:44:14.975596] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 11:51:18.930860] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 11:51:19.057739] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 11:51:45.319658]
+False is not true : Validation failed: Nationality should be non null, non empty and set to 'Australian'
+Suggested Fix:
+```
+UPDATE players SET nationality = 'Australian' WHERE nationality IS NULL OR LOWER(nationality) <> 'australian';
+```
+========================================
+Executed SQL:
+UPDATE players SET nationality = 'Australian' WHERE nationality IS NULL OR LOWER(nationality) <> 'australian';
+```
+========================================
+
+[2025-07-17 11:51:45.410372] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 11:52:05.766423] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 11:52:05.889520] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 11:52:12.635679]
+False is not true : Validation failed: Nationality should be non null, non empty and set to 'Australian'
+Suggested Fix:
+UPDATE players SET nationality = 'Australian' WHERE nationality IS NULL OR LOWER(nationality) != 'australian';
+========================================
+Executed SQL:
+UPDATE players SET nationality = 'Australian' WHERE nationality IS NULL OR LOWER(nationality) != 'australian';
+========================================
+
+[2025-07-17 11:52:12.689255] PASSED: Nationality should be non null, non empty and set to 'Australian' (after healing)
+========================================
+
+[2025-07-17 11:52:12.691255] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 11:52:12.693619] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 12:04:09.379377] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 12:04:09.507622] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 12:04:09.511986] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 12:04:09.514732] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 12:04:09.518799] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 12:04:35.511701] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 12:04:35.635936] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 12:04:35.643391] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 12:04:35.646035] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 12:04:35.648491] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 12:05:58.341769] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 12:05:58.469352] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 12:05:58.471516] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 12:05:58.473258] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 12:05:58.476256] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 12:08:40.910805] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 12:08:41.031757] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 12:08:41.036731] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 12:08:41.039255] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 12:09:11.921851]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+DELETE FROM players WHERE id NOT IN ( SELECT * FROM ( SELECT MIN(id) FROM players GROUP BY name ) AS temp_ids );
+========================================
+Executed SQL:
+DELETE FROM players WHERE id NOT IN ( SELECT * FROM ( SELECT MIN(id) FROM players GROUP BY name ) AS temp_ids );
+========================================
+
+[2025-07-17 12:09:11.978632] PASSED: Player names should be unique (after healing)
+========================================
+
+[2025-07-17 12:09:24.020901] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 12:09:24.150517] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 12:09:24.157237] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 12:09:24.159491] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 12:09:24.161798] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 12:11:59.374641]
+False is not true : Validation failed: IPL Team should be only Chennai Super Kings
+Suggested Fix:
+UPDATE players SET ipl_team = 'Chennai Super Kings' WHERE ipl_team IS NULL OR ipl_team != 'Chennai Super Kings';
+========================================
+Executed SQL:
+UPDATE players SET ipl_team = 'Chennai Super Kings' WHERE ipl_team IS NULL OR ipl_team != 'Chennai Super Kings';
+========================================
+
+[2025-07-17 12:11:59.441720] PASSED: IPL Team should be only Chennai Super Kings (after healing)
+========================================
+
+[2025-07-17 12:11:59.527118] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 12:11:59.533494] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 12:11:59.535575] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 12:11:59.537712] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 12:59:17.990751] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 12:59:18.121051] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 12:59:18.128703] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 12:59:23.405762] Manual salary correction performed for 1 players.
+========================================
+
+[2025-07-17 12:59:23.408128] PASSED: Salary should be positive (manual correction)
+========================================
+
+[2025-07-17 12:59:23.411016] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 13:05:33.792254] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 13:05:33.908003] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 13:05:33.911280] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 13:05:33.913979] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 13:06:03.750139]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+DELETE FROM players WHERE id NOT IN ( SELECT * FROM ( SELECT MIN(id) FROM players GROUP BY name ) AS temp_ids );
+========================================
+Executed SQL:
+DELETE FROM players WHERE id NOT IN ( SELECT * FROM ( SELECT MIN(id) FROM players GROUP BY name ) AS temp_ids );
+========================================
+
+[2025-07-17 13:06:03.807564] PASSED: Player names should be unique (after healing)
+========================================
+
+[2025-07-17 13:42:24.235217] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 13:42:24.351900] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 13:42:49.930096]
+False is not true : Validation failed: Nationality should be non null, non empty and set to 'Australian'
+Suggested Fix:
+```
+UPDATE players SET nationality = 'Australian' WHERE nationality IS NULL OR LOWER(nationality) <> 'australian';
+```
+========================================
+Executed SQL:
+UPDATE players SET nationality = 'Australian' WHERE nationality IS NULL OR LOWER(nationality) <> 'australian';
+```
+========================================
+
+[2025-07-17 13:42:50.029519] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 13:42:54.983353] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 13:42:55.109710] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 13:43:03.282098]
+False is not true : Validation failed: Nationality should be non null, non empty and set to 'Australian'
+Suggested Fix:
+```
+UPDATE players
+SET nationality = 'Australian'
+WHERE nationality IS NULL OR TRIM(LOWER(nationality)) != 'australian';
+```
+========================================
+Executed SQL:
+UPDATE players
+SET nationality = 'Australian'
+WHERE nationality IS NULL OR TRIM(LOWER(nationality)) != 'australian';
+```
+========================================
+
+[2025-07-17 13:43:03.339204] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 13:43:10.772797] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 13:43:10.903297] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 13:43:18.515628]
+False is not true : Validation failed: Nationality should be non null, non empty and set to 'Australian'
+Suggested Fix:
+UPDATE players SET nationality = 'Australian' WHERE nationality IS NULL OR nationality = '' OR LOWER(nationality) != 'australian';
+========================================
+Executed SQL:
+UPDATE players SET nationality = 'Australian' WHERE nationality IS NULL OR nationality = '' OR LOWER(nationality) != 'australian';
+========================================
+
+[2025-07-17 13:43:18.567964] PASSED: Nationality should be non null, non empty and set to 'Australian' (after healing)
+========================================
+
+[2025-07-17 13:43:18.569988] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 13:43:18.571738] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 13:55:23.230539] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 13:55:23.354504] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 13:55:50.239339]
+False is not true : Validation failed: Nationality should be non null, non empty and set to 'Australian'
+Suggested Fix:
+UPDATE players SET nationality='Australian' WHERE nationality IS NULL OR LENGTH(TRIM(nationality)) = 0 OR LOWER(nationality) != 'australian';
+========================================
+Executed SQL:
+UPDATE players SET nationality='Australian' WHERE nationality IS NULL OR LENGTH(TRIM(nationality)) = 0 OR LOWER(nationality) != 'australian';
+========================================
+
+[2025-07-17 13:55:50.295858] PASSED: Nationality should be non null, non empty and set to 'Australian' (after healing)
+========================================
+
+[2025-07-17 13:55:50.297875] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 13:55:50.299952] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 13:59:21.140086]
+False is not true : Validation failed: IPL Team should be only Chennai Super Kings
+Suggested Fix:
+UPDATE players SET ipl_team = 'Chennai Super Kings' WHERE ipl_team IS NULL OR ipl_team <> 'Chennai Super Kings';
+========================================
+Executed SQL:
+UPDATE players SET ipl_team = 'Chennai Super Kings' WHERE ipl_team IS NULL OR ipl_team <> 'Chennai Super Kings';
+========================================
+
+[2025-07-17 13:59:21.197996] PASSED: IPL Team should be only Chennai Super Kings (after healing)
+========================================
+
+[2025-07-17 13:59:21.281800] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 13:59:21.288449] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 13:59:21.290703] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 13:59:21.293165] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 14:06:18.957052] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 14:06:44.124618] Datatype mismatch detected
+- Column 'age_at_selection' is currently 'float' but should be 'int'
+Suggested Fix:
+ALTER TABLE players MODIFY age_at_selection INT;
+========================================
+
+[2025-07-17 14:06:44.171394] Executed Datatype Healing via test:
+ALTER TABLE players MODIFY age_at_selection INT;
+========================================
+
+[2025-07-17 14:06:44.178805] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 14:06:44.180808] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 14:06:44.183165] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 14:12:56.435062] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 14:12:56.565719] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 14:12:56.576638] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 14:12:56.579364] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 14:12:56.581870] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 14:24:24.002667] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 14:24:24.134499] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 14:24:24.145406] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 14:24:24.148201] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 14:24:24.151153] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 14:59:58.172590] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 14:59:58.288835] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 14:59:58.299717] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 15:00:06.701906] PASSED: Extra column handling completed:{'sal'}
+========================================
+
+[2025-07-17 15:00:06.706309] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 15:00:06.710122] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 15:02:04.963507] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 15:02:05.095118] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 15:02:05.103823] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 15:02:05.194037] PASSED: No extra column found in the test table
+========================================
+
+[2025-07-17 15:02:05.199537] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 15:02:05.202270] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 15:09:40.127027] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 15:09:40.267792] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 15:09:40.279954] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 15:13:00.579282] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 15:15:11.245414] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 15:15:11.368251] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 15:15:11.373875] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 15:15:11.464305] PASSED: No extra column found in the test table
+========================================
+
+[2025-07-17 15:15:11.467866] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 15:15:11.470755] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 15:16:46.654239] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 15:16:46.784912] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 15:16:46.788193] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 15:23:31.094306] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 15:23:31.220527] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 15:23:31.222775] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 15:29:06.353773] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 15:29:06.485049] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 15:29:06.487195] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 15:35:42.634585] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 15:35:42.784198] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 15:35:42.791262] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 15:42:35.917525] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 15:42:36.060045] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 15:42:36.067511] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 15:42:39.367082] PASSED: No extra column found in the test table
+========================================
+
+[2025-07-17 15:42:39.369821] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 15:42:39.372547] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 15:45:23.168690] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 15:45:23.309191] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 15:45:23.311344] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 15:45:25.113227] PASSED: Extra column handling completed:{'area'}
+========================================
+
+[2025-07-17 15:45:25.116047] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 15:45:25.118793] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 16:00:18.969172] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 16:00:19.087265] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 16:00:19.094554] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 16:00:19.193507] PASSED: No extra column found in the test table
+========================================
+
+[2025-07-17 16:00:22.116627] Manual salary correction performed for 1 players.
+========================================
+
+[2025-07-17 16:00:22.119114] PASSED: Salary should be positive (manual correction)
+========================================
+
+[2025-07-17 16:00:22.126093] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 16:01:15.338139] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 16:01:15.452131] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 16:01:42.700568]
+False is not true : Validation failed: Nationality should be non null, non empty and set to 'Australian'
+Suggested Fix:
+```
+UPDATE players SET nationality = 'Australian' WHERE nationality IS NULL OR TRIM(LOWER(nationality)) != 'australian';
+```
+========================================
+Executed SQL:
+UPDATE players SET nationality = 'Australian' WHERE nationality IS NULL OR TRIM(LOWER(nationality)) != 'australian';
+========================================
+
+[2025-07-17 16:01:42.756807] PASSED: Nationality should be non null, non empty and set to 'Australian' (after healing)
+========================================
+
+[2025-07-17 16:01:42.854576] PASSED: No extra column found in the test table
+========================================
+
+[2025-07-17 16:01:42.856743] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 16:01:42.859064] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 16:02:37.533537] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 16:02:37.666654] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 16:02:37.673294] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 16:02:37.766947] PASSED: No extra column found in the test table
+========================================
+
+[2025-07-17 16:02:37.772052] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 16:02:53.457716]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+DELETE FROM players WHERE id NOT IN ( SELECT * FROM ( SELECT MIN(id) FROM players GROUP BY name ) AS temp_ids );
+========================================
+Executed SQL:
+DELETE FROM players WHERE id NOT IN ( SELECT * FROM ( SELECT MIN(id) FROM players GROUP BY name ) AS temp_ids );
+========================================
+
+[2025-07-17 16:02:53.513319] PASSED: Player names should be unique (after healing)
+========================================
+
+[2025-07-17 16:03:02.524956] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 16:03:02.637729] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 16:03:02.644213] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 16:03:02.736315] PASSED: No extra column found in the test table
+========================================
+
+[2025-07-17 16:03:02.740877] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 16:03:02.747936] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 16:07:01.727741] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 16:07:01.850482] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 16:07:01.857642] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 16:07:04.497375] PASSED: No extra column found in the test table
+========================================
+
+[2025-07-17 16:07:04.500784] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 16:07:04.503615] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 16:07:33.140401] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 16:07:33.264660] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 16:07:33.271725] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 16:59:49.637341] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 16:59:49.757213] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 16:59:49.762003] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 17:04:44.716135] PASSED: Extra column handling completed:{'area'}
+========================================
+
+[2025-07-17 17:08:17.042704] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 17:08:17.189222] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 17:08:17.195075] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 17:08:17.292271] PASSED: No extra column found in the test table
+========================================
+
+[2025-07-17 17:08:17.294871] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 17:08:17.298280] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 17:11:41.185962] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 17:11:41.306415] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 17:11:41.311531] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 17:11:41.399560] PASSED: No extra column found in the test table
+========================================
+
+[2025-07-17 17:11:41.403308] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 17:12:11.439487]
+False is not true : Validation failed: Player names should be unique
+Suggested Fix:
+DELETE FROM players WHERE id NOT IN (SELECT * FROM (SELECT MIN(id) FROM players GROUP BY name) AS temp_ids);
+========================================
+Executed SQL:
+DELETE FROM players WHERE id NOT IN (SELECT * FROM (SELECT MIN(id) FROM players GROUP BY name) AS temp_ids);
+========================================
+
+[2025-07-17 17:12:11.491168] PASSED: Player names should be unique (after healing)
+========================================
+
+[2025-07-17 17:14:38.110896] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 17:14:38.223709] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 17:14:38.230960] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 17:14:38.328963] PASSED: No extra column found in the test table
+========================================
+
+[2025-07-17 17:14:40.900335] Manual salary correction performed for 1 players.
+========================================
+
+[2025-07-17 17:14:40.902791] PASSED: Salary should be positive (manual correction)
+========================================
+
+[2025-07-17 17:14:40.908254] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 17:15:34.221075] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 17:15:34.337791] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 17:15:47.714898]
+False is not true : Validation failed: Nationality should be non null, non empty and set to 'Australian'
+Suggested Fix:
+UPDATE players SET nationality = 'Australian' WHERE nationality IS NULL OR LENGTH(TRIM(nationality)) = 0 OR LOWER(nationality) != 'australian';
+========================================
+Executed SQL:
+UPDATE players SET nationality = 'Australian' WHERE nationality IS NULL OR LENGTH(TRIM(nationality)) = 0 OR LOWER(nationality) != 'australian';
+========================================
+
+[2025-07-17 17:15:47.771373] PASSED: Nationality should be non null, non empty and set to 'Australian' (after healing)
+========================================
+
+[2025-07-17 17:15:47.863113] PASSED: No extra column found in the test table
+========================================
+
+[2025-07-17 17:15:47.865591] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 17:15:47.867610] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 17:16:47.049443]
+False is not true : Validation failed: IPL Team should be only Chennai Super Kings
+Suggested Fix:
+UPDATE players SET ipl_team = 'Chennai Super Kings' WHERE ipl_team IS NULL OR ipl_team <> 'Chennai Super Kings';
+========================================
+Executed SQL:
+UPDATE players SET ipl_team = 'Chennai Super Kings' WHERE ipl_team IS NULL OR ipl_team <> 'Chennai Super Kings';
+========================================
+
+[2025-07-17 17:16:47.106006] PASSED: IPL Team should be only Chennai Super Kings (after healing)
+========================================
+
+[2025-07-17 17:16:47.181466] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 17:16:47.188259] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 17:16:47.285719] PASSED: No extra column found in the test table
+========================================
+
+[2025-07-17 17:16:47.288700] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 17:16:47.291148] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 17:41:46.292502] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 17:41:46.416326] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 17:41:46.421669] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 17:41:46.514709] PASSED: No extra column found in the test table
+========================================
+
+[2025-07-17 17:41:58.060167] Manual salary correction performed for 1 players.
+========================================
+
+[2025-07-17 17:41:58.063581] PASSED: Salary should be positive (manual correction)
+========================================
+
+[2025-07-17 17:41:58.066449] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 17:43:27.379422] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 17:43:27.493482] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 17:43:27.498716] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 17:43:34.221665] PASSED: Extra column handling completed:{'salary'}
+========================================
+
+[2025-07-17 17:43:34.224524] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 17:43:34.227480] PASSED: Player names should be unique
+========================================
+
+[2025-07-17 17:44:54.624336] PASSED: IPL Team should be only Chennai Super Kings
+========================================
+
+[2025-07-17 17:44:54.739752] PASSED: No datatype mismatch found via Memcached.
+========================================
+
+[2025-07-17 17:44:54.743581] PASSED: Nationality should be non null, non empty and set to 'Australian'
+========================================
+
+[2025-07-17 17:44:56.831515] PASSED: Extra column handling completed:{'salary'}
+========================================
+
+[2025-07-17 17:44:56.834375] PASSED: Salary should be positive
+========================================
+
+[2025-07-17 17:44:56.841035] PASSED: Player names should be unique
+========================================
